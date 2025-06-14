@@ -117,6 +117,19 @@ The project is under active development. Some of the enhancements planned includ
 ## Contact
 
 For questions, feedback, or collaboration, please reach out via GitHub Issues or open a discussion thread in the project repository.
-- LinkedIN - https://www.linkedin.com/in/yash-radhakrishna/
+
+---
+## Contributor Socials 
+
+### LinkedIN 
+- https://www.linkedin.com/in/yash-radhakrishna/
+- https://www.linkedin.com/in/aarti-korhale-67487824a/
+- https://www.linkedin.com/in/yashwardhan-bhosale-335592298/
+
+### Github
+-https://github.com/Yashwardhan2512
+-https://github.com/123yash8/
+-https://github.com/AartiKorhale
+
 
 
