@@ -117,6 +117,6 @@ The project is under active development. Some of the enhancements planned includ
 ## Contact
 
 For questions, feedback, or collaboration, please reach out via GitHub Issues or open a discussion thread in the project repository.
--LinkedIN - https://www.linkedin.com/in/yash-radhakrishna/
+- LinkedIN - https://www.linkedin.com/in/yash-radhakrishna/
 
 
