@@ -127,9 +127,9 @@ For questions, feedback, or collaboration, please reach out via GitHub Issues or
 - https://www.linkedin.com/in/yashwardhan-bhosale-335592298/
 
 ### Github
--https://github.com/Yashwardhan2512
--https://github.com/123yash8/
--https://github.com/AartiKorhale
+- https://github.com/Yashwardhan2512
+- https://github.com/123yash8/
+- https://github.com/AartiKorhale
 
 
 
