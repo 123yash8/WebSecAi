@@ -1,5 +1,10 @@
 # WebSecAi
 
+## License
+[![License: CC BY‑NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](LICENSE)
+
+This project is licensed under **Creative Commons Attribution‑NonCommercial 4.0 International**.  
+Commercial use is prohibited without explicit written permission.
 
 ## Overview
 
